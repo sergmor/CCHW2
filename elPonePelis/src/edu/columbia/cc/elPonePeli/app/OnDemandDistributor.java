@@ -72,7 +72,7 @@ public class OnDemandDistributor
 		this.originId = originId;
 	}
 	
-	private String createWebDistribution()
+	public String createWebDistribution()
 	{
 		String webDistributionDomainName = "";
 		System.out.println("Trying to create web distribution ...");
@@ -119,7 +119,7 @@ public class OnDemandDistributor
 		return webDistributionDomainName;
 	}
 	
-	private String createRtmpDistribution()
+	public String createRtmpDistribution()
 	{
 		String rtmpDistributionDomainName = "";
 		System.out.println("Trying to create RTMP distribution ...");

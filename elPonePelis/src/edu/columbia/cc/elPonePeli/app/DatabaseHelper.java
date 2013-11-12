@@ -28,35 +28,41 @@ public class DatabaseHelper
 		return this;
 	}
 	
-	private void initialize()
+	public void initialize()
 	{
-		System.out.println("Trying to create table: " + this.tableName);
+		System.out.println("Trying to create table: " + DatabaseHelper.tableName);
 		try {
 			ArrayList<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition().withAttributeName("Id").withAttributeType("N"));
-			        
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("BucketName").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoName").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoLink").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("ETag").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("AvgRating").withAttributeType("N"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("NumRatings").withAttributeType("N"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoFormat").withAttributeType("S"));
+			
 			ArrayList<KeySchemaElement> ks = new ArrayList<KeySchemaElement>();
 			ks.add(new KeySchemaElement().withAttributeName("Id").withKeyType(KeyType.HASH));
-//			ks
 			  
 			ProvisionedThroughput provisionedThroughput = new ProvisionedThroughput()
 						    .withReadCapacityUnits(10L)
 						    .withWriteCapacityUnits(10L);
 			        
 			CreateTableRequest request = new CreateTableRequest()
-						    .withTableName(this.tableName)
+						    .withTableName(DatabaseHelper.tableName)
 						    .withAttributeDefinitions(attributeDefinitions)
 						    .withKeySchema(ks)
 						    .withProvisionedThroughput(provisionedThroughput);
 			    
-			CreateTableResult result = this.amazonDynamoDBClient.createTable(request);
+			this.amazonDynamoDBClient.createTable(request);
 			System.out.println("Request sent.");
 			
 			while (true)
 			{
 				System.out.println("Checking state ...");
 				TableDescription tableDescription = this.amazonDynamoDBClient.describeTable(new DescribeTableRequest()
-																				.withTableName(this.tableName)).getTable();
+																				.withTableName(DatabaseHelper.tableName)).getTable();
 				String status = tableDescription.getTableStatus();
 				if (status.equals(TableStatus.ACTIVE))
 				{
@@ -68,7 +74,7 @@ public class DatabaseHelper
 					try{Thread.sleep(10 * 1000);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			}
-			System.out.println("Table " + this.tableName + " created.");
+			System.out.println("Table " + DatabaseHelper.tableName + " created.");
 		}
 		catch(AmazonServiceException e)
 		{

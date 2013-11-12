@@ -29,7 +29,7 @@ public class VideoStore
 		this.bucketName = bucketName;
 	}
 	
-	private void initialize()
+	public void initialize()
 	{
 		try
 		{

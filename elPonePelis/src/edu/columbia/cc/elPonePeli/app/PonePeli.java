@@ -1,5 +1,6 @@
 package edu.columbia.cc.elPonePeli.app;
 
-public class PonePeli {
+public class PonePeli
+{
 
 }
