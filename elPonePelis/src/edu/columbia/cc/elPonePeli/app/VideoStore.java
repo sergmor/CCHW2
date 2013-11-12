@@ -31,6 +31,7 @@ public class VideoStore
 	
 	public void initialize()
 	{
+		System.out.println("Trying to create S3 bucket (video store) ...");
 		try
 		{
 			if (this.bucketName.equals(""))
@@ -44,6 +45,7 @@ public class VideoStore
 			}
 			
     		s3.createBucket(this.bucketName);
+    		System.out.println("Done.");
             
 	    }
 		catch (AmazonServiceException ase)
@@ -54,7 +56,4 @@ public class VideoStore
 	        System.out.println("Request ID: " + ase.getRequestId());
 	   	}
 	}
-	
-	
-
 }

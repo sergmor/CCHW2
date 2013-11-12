@@ -6,9 +6,9 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
@@ -16,11 +16,12 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.model.TableStatus;
 
+import edu.columbia.cc.elPonePelis.model.Video;
+
 public class DatabaseHelper
 {
 	private AmazonDynamoDBClient amazonDynamoDBClient = null;
 	public static final String tableName = "VIDEOS_ALL";
-	
 	
 	public DatabaseHelper withCredentials(AWSCredentials awsCredentials)
 	{
@@ -34,13 +35,6 @@ public class DatabaseHelper
 		try {
 			ArrayList<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition().withAttributeName("Id").withAttributeType("N"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("BucketName").withAttributeType("S"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoName").withAttributeType("S"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoLink").withAttributeType("S"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("ETag").withAttributeType("S"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("AvgRating").withAttributeType("N"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("NumRatings").withAttributeType("N"));
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("VideoFormat").withAttributeType("S"));
 			
 			ArrayList<KeySchemaElement> ks = new ArrayList<KeySchemaElement>();
 			ks.add(new KeySchemaElement().withAttributeName("Id").withKeyType(KeyType.HASH));
@@ -64,13 +58,14 @@ public class DatabaseHelper
 				TableDescription tableDescription = this.amazonDynamoDBClient.describeTable(new DescribeTableRequest()
 																				.withTableName(DatabaseHelper.tableName)).getTable();
 				String status = tableDescription.getTableStatus();
-				if (status.equals(TableStatus.ACTIVE))
+				if (status.equals(TableStatus.ACTIVE.toString()))
 				{
+					System.out.println("State = " + status);
 					break;
 				}
 				else
 				{
-					System.out.println("Still " + tableDescription.getTableStatus() + ". Sleeping for 10s ...");
+					System.out.println("State = " + status + ". Sleeping for 10s ...");
 					try{Thread.sleep(10 * 1000);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			}
@@ -81,6 +76,26 @@ public class DatabaseHelper
 			e.printStackTrace();
 		}
 		catch (AmazonClientException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveVideo(Video video)
+	{
+		System.out.println("Trying to save video details ...");
+		try
+		{
+			if (video.getId() == null)
+			{
+				throw new Exception("Primary key can't be null.");
+			}
+			
+			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
+			mapper.save(video);
+			System.out.println("Saved.");
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

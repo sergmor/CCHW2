@@ -20,6 +20,7 @@ import com.amazonaws.services.cloudfront.model.Origin;
 import com.amazonaws.services.cloudfront.model.Origins;
 import com.amazonaws.services.cloudfront.model.PriceClass;
 import com.amazonaws.services.cloudfront.model.S3Origin;
+import com.amazonaws.services.cloudfront.model.S3OriginConfig;
 import com.amazonaws.services.cloudfront.model.StreamingDistributionConfig;
 import com.amazonaws.services.cloudfront.model.StreamingLoggingConfig;
 import com.amazonaws.services.cloudfront.model.TrustedSigners;
@@ -80,7 +81,7 @@ public class OnDemandDistributor
 		try
 		{
 	       	Origins origins = new Origins()
-	       						.withItems(new Origin().withDomainName(this.originDomainName).withId(this.originId))
+	       						.withItems(new Origin().withDomainName(this.originDomainName).withId(this.originId).withS3OriginConfig(new S3OriginConfig().withOriginAccessIdentity("")))
 	       						.withQuantity(Integer.valueOf(1));
 			DefaultCacheBehavior defaultCacheBehavior = new DefaultCacheBehavior()
 								.withViewerProtocolPolicy("allow-all")

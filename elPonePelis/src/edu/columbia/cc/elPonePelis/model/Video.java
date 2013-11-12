@@ -52,6 +52,13 @@ public class Video
 	public void setVideoFormat(String videoFormat) {this.videoFormat = videoFormat;}
 	
 	@DynamoDBIgnore
+	public Video withId(int id)
+	{
+		this.id = Integer.valueOf(id);
+		return this;
+	}
+	
+	@DynamoDBIgnore
 	public Video withBucketName(String bucketName)
 	{
 		this.bucketName = bucketName;
@@ -76,6 +83,21 @@ public class Video
 	public Video withETag(String eTag)
 	{
 		this.eTag = eTag;
+		return this;
+	}
+	
+	@DynamoDBIgnore
+	public Video withVideoFormat(String videoFormat)
+	{
+		this.videoFormat = videoFormat;
+		return this;
+	}
+	
+	@DynamoDBIgnore
+	public Video withDefaultRating()
+	{
+		this.avgRating = 0.0f;
+		this.numRatings = 0;
 		return this;
 	}
 	
