@@ -6,8 +6,13 @@ public class Video
 	private String videoName;
 	private String videoLink;
 	private String eTag;
+	private Rating rating;
+	private VideoFormat videoFormat;
 	
-	public Video(){}
+	public Video()
+	{
+		this.rating = new Rating();
+	}
 	
 	public Video withBucketName(String bucketName)
 	{
@@ -56,5 +61,21 @@ public class Video
 	}
 	public void seteTag(String eTag) {
 		this.eTag = eTag;
+	}
+
+	public Rating getRating() {
+		return rating;
+	}
+
+	public void setRating(Rating rating) {
+		this.rating = rating;
+	}
+
+	public VideoFormat getVideoFormat() {
+		return videoFormat;
+	}
+
+	public void setVideoFormat(VideoFormat videoFormat) {
+		this.videoFormat = videoFormat;
 	}
 }
