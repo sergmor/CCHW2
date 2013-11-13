@@ -101,12 +101,19 @@ public class DatabaseHelper
 	public Video getVideoById(String id)
 	{
 		Video video = null;
-		System.out.println("Trying to fetch video records for id: '" + id + " ...");
+		System.out.println("Checking if video record exixts with id: '" + id + "' ...");
 		try
 		{			
 			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
 			video = mapper.load(Video.class, id);
-			System.out.println("Retrieved : " + video.toString());
+			if (video == null)
+			{
+				System.out.println("No such record found.");
+			}
+			else
+			{
+				System.out.println("Retrieved.");
+			}
 		}
 		catch (Exception e)
 		{
@@ -118,6 +125,7 @@ public class DatabaseHelper
 	
 	public List<Video> getAllVideos()
 	{
+		System.out.println("Trying to fetch all video records ...");
 		List<Video> videos = new ArrayList<Video>();
 		try
 		{			
@@ -125,12 +133,35 @@ public class DatabaseHelper
 			DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
 			
 			videos = mapper.scan(Video.class, scanExpression);
-			System.out.println("Retrieved " + videos.size() + " records.");
+			System.out.println("Retrieved " + videos.size() + " record(s).");
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		return videos;
+	}
+	
+	public void deleteVideoById(String id)
+	{
+		try
+		{
+			Video video = getVideoById(id);
+			if (video == null)
+			{
+				System.out.println("Nothing to delete.");
+			}
+			else
+			{
+				System.out.println("Trying to delete record with id: '" + id + "' ...");
+				DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
+				mapper.delete(video);
+				System.out.println("Deleted.");
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
