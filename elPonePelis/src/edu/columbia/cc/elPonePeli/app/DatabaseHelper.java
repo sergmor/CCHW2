@@ -34,7 +34,7 @@ public class DatabaseHelper
 		System.out.println("Trying to create table: " + DatabaseHelper.tableName);
 		try {
 			ArrayList<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName("Id").withAttributeType("N"));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName("Id").withAttributeType("S"));
 			
 			ArrayList<KeySchemaElement> ks = new ArrayList<KeySchemaElement>();
 			ks.add(new KeySchemaElement().withAttributeName("Id").withKeyType(KeyType.HASH));
@@ -85,12 +85,7 @@ public class DatabaseHelper
 	{
 		System.out.println("Trying to save video details ...");
 		try
-		{
-			if (video.getId() == null)
-			{
-				throw new Exception("Primary key can't be null.");
-			}
-			
+		{			
 			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
 			mapper.save(video);
 			System.out.println("Saved.");
@@ -99,5 +94,23 @@ public class DatabaseHelper
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public Video getVideoById(String id)
+	{
+		Video video = null;
+		System.out.println("Trying to fetch video records for id: '" + id + " ...");
+		try
+		{			
+			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
+			video = mapper.load(Video.class, id);
+			System.out.println("Retrieved : " + video.toString());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return video;
 	}
 }
