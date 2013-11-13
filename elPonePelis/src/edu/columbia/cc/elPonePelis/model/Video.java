@@ -1,5 +1,7 @@
 package edu.columbia.cc.elPonePelis.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
@@ -8,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
 
 @DynamoDBTable(tableName=DatabaseHelper.tableName)
+@XmlRootElement
 public class Video
 {
 	private Integer id;
