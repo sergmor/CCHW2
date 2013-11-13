@@ -1,12 +1,14 @@
 package edu.columbia.cc.elPonePeli.app;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
@@ -112,5 +114,23 @@ public class DatabaseHelper
 		}
 		
 		return video;
+	}
+	
+	public List<Video> getAllVideos()
+	{
+		List<Video> videos = new ArrayList<Video>();
+		try
+		{			
+			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
+			DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+			
+			videos = mapper.scan(Video.class, scanExpression);
+			System.out.println("Retrieved " + videos.size() + " records.");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return videos;
 	}
 }
