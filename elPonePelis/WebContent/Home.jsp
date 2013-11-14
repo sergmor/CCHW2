@@ -37,17 +37,20 @@ if (videos.size() > 0)
         {
 
         }
-      function playPeli(linkName)
+      function playPeli(videoLink, videoId)
       {
-    	  var videoPlayerId = document.getElementById('videoPlayerId');
-          var videoSrcId = document.getElementById('videoSrcId');
-			//TODO: have to set correct videoId also, for correct video to be rated
-          videoPlayerId.pause();
+    	  var videoPlayer = document.getElementById('videoPlayerId');
+          var videoSrc = document.getElementById('videoSrcId');
           
-          videoSrcId.setAttribute("src", linkName);
+          videoPlayer.pause();
+          
+          videoSrc.setAttribute("src", videoLink);
 
-          videoPlayerId.load();
-          //videoPlayerId.play();
+          videoPlayer.load();
+          //videoPlayer.play();
+          //alert("videoLink="+videoLink+", videoId="+videoId);
+          
+          document.getElementById('currentVideoId').value = videoId;
       }  
         
     </script>
@@ -128,7 +131,7 @@ if (videos.size() > 0)
                 </p>
               </div>
               <form action="RatingUpdateServlet" method="POST">
-              	<input type="hidden" name="currentVideoId" value="<%=defaultVideoId%>"/>
+              	<input type="hidden" name="currentVideoId" value="<%=defaultVideoId%>" id="currentVideoId"/>
 	              <select name="rating">
 	                    <option value="1">1</option>
 	                    <option value="2">2</option>
@@ -171,7 +174,7 @@ if (videos.size() > 0)
                     	%>
                     	  <tr>
                             <td align = "left">
-                                <div class="thumb" onclick="playPeli(&quot;<%=v.getVideoLink()%>&quot;)"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
+                                <div class="thumb" onclick="playPeli(&quot;<%=v.getVideoLink()%>&quot;,&quot;<%=v.getId()%>&quot;)"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
                             </td>
                         </tr>
                     	<% 
