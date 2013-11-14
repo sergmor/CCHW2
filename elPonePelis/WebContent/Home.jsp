@@ -1,12 +1,15 @@
+<%@page import="com.sun.org.apache.xpath.internal.FoundIndex"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ page import="com.amazonaws.auth.*" %>
+
 <%@ page import="edu.columbia.cc.elPonePeli.app.*" %>
 <%@ page import="edu.columbia.cc.elPonePelis.model.*" %>
 <%@ page import="java.util.List" %>
 
 <%
-AWSCredentials awsCredentials = new PropertiesCredentials(this.getClass().getResourceAsStream("AwsCredentials.properties"));
-DatabaseHelper helper = new DatabaseHelper().withCredentials(awsCredentials);
+AWSCredentialsProvider credentialsProvider = new ClasspathPropertiesFileCredentialsProvider();
+//AWSCredentials awsCredentials = new PropertiesCredentials(Home.class.getResourceAsStream("AwsCredentials.properties"));
+DatabaseHelper helper = new DatabaseHelper().withCredentialsProvider(credentialsProvider);
 List<Video> videos = helper.getAllVideos();
 %>
 
@@ -53,7 +56,7 @@ List<Video> videos = helper.getAllVideos();
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active">
-              <a href="Home.html">Home</a>
+              <a href="Home.jsp">Home</a>
             </li>
             <li>
               <a href="Upload.html">Upload</a>
@@ -143,41 +146,19 @@ List<Video> videos = helper.getAllVideos();
                     <tr>
                         <!--thumbnails-->
                        <div id="thumbs">
-                        <tr>
+                       <%
+                       System.out.println("Before the for loop.");
+                       for (Video v : videos)
+                       {
+                    	%>
+                    	  <tr>
                             <td align = "left">
                                 <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
                             </td>
                         </tr>
-                         <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>
-                        <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
-                            </td>
-                         </tr>               
+                    	<% 
+                       }
+                       %>
                       </div>                                                 
                     </tbody>
                 </table>

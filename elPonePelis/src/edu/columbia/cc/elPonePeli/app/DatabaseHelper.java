@@ -6,6 +6,7 @@ import java.util.List;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -28,6 +29,12 @@ public class DatabaseHelper
 	public DatabaseHelper withCredentials(AWSCredentials awsCredentials)
 	{
 		this.amazonDynamoDBClient = new AmazonDynamoDBClient(awsCredentials);
+		return this;
+	}
+	
+	public DatabaseHelper withCredentialsProvider(AWSCredentialsProvider provider)
+	{
+		this.amazonDynamoDBClient = new AmazonDynamoDBClient(provider);
 		return this;
 	}
 	
