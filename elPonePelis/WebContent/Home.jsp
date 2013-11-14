@@ -76,6 +76,7 @@ if (videos.size() > 0)
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">el Pone Pelis</a>
         </div>
@@ -89,6 +90,9 @@ if (videos.size() > 0)
             </li>
             <li>
               <a href="Delete.html">Delete</a>
+            </li>
+            <li>
+              <a href="LiveStream.html">Live Stream</a>
             </li>
           </ul>
         </div>
