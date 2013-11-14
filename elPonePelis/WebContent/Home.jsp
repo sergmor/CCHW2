@@ -8,9 +8,13 @@
 
 <%
 AWSCredentialsProvider credentialsProvider = new ClasspathPropertiesFileCredentialsProvider();
-//AWSCredentials awsCredentials = new PropertiesCredentials(Home.class.getResourceAsStream("AwsCredentials.properties"));
 DatabaseHelper helper = new DatabaseHelper().withCredentialsProvider(credentialsProvider);
 List<Video> videos = helper.getAllVideos();
+String defaultVideoLink = "";
+if (videos.size() > 0)
+{
+	defaultVideoLink = videos.get(0).getVideoLink();
+}
 %>
 
 <!DOCTYPE html>
@@ -93,10 +97,7 @@ List<Video> videos = helper.getAllVideos();
           <tr>
             <td align = "left" >
               <video width="400" height="300" controls="controls">
-                  <source src="C:\Users\Rituparna\Downloads\lab3.mp4" type="video/mp4" />
-                   <object data="movie.mp4" width="400" height="300">
-                    <embed src="C:\Users\Rituparna\Downloads\lab3.mp4" width="380" height="300">
-                   </object> 
+                  <source src="<%=defaultVideoLink%>" alt="No Link" type="video/mp4" />
               </video>
                 
               <div class="well" style="height: 85px; width: 580px">
@@ -121,17 +122,13 @@ List<Video> videos = helper.getAllVideos();
                 
                <ul class="list-group">
                 <li class="list-group-item" style= "width: 564px" >
-                    <textarea name="comments" style="position: absolute; top: 2px;
-                                                                         left: 0px;
-                                                                          "cols="90" rows="2">                        
+                    <textarea name="comments" style="position: absolute; top: 2px;left: 0px;"cols="90" rows="2">                        
                         
                     </textarea>                    
                     Comment..!
                 </li>
                 <li class="list-group-item"  style= "width: 564px">
-                    <textarea name="comments" style="position: absolute; top: 2px;
-                                                                         left: 0px;
-                                                                          "cols="90" rows="2"> 
+                    <textarea name="comments" style="position: absolute; top: 2px;left: 0px;"cols="90" rows="2"> 
                         
                     </textarea>
                   Comment..!!
@@ -153,7 +150,7 @@ List<Video> videos = helper.getAllVideos();
                     	%>
                     	  <tr>
                             <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png" alt="Smiley face" height="85" width="85" /></div>
+                                <div class="thumb" onclick="playPeli()"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
                             </td>
                         </tr>
                     	<% 

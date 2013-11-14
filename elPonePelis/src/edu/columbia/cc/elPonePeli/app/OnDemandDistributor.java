@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.cloudfront.AmazonCloudFrontClient;
 import com.amazonaws.services.cloudfront.model.Aliases;
 import com.amazonaws.services.cloudfront.model.CacheBehaviors;
@@ -33,6 +34,12 @@ public class OnDemandDistributor
     private String originId = "";
 	
 	public OnDemandDistributor(){}
+	
+	public OnDemandDistributor withCredentialsProvider(AWSCredentialsProvider provider)
+	{
+		this.amazonCloudFrontClient = new AmazonCloudFrontClient(provider); 
+		return this;
+	}
 	
 	public OnDemandDistributor withAWSCredentials(AWSCredentials awsCredentials)
 	{

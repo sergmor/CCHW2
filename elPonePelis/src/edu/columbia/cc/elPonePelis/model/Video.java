@@ -12,12 +12,13 @@ import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
 
 @DynamoDBTable(tableName=DatabaseHelper.tableName)
 @XmlRootElement
-public class Video
+public class Video implements Comparable
 {
 	private String id;
 	private String bucketName;
 	private String videoName;
 	private String videoLink;
+	private String thumbnailLink;
 	private String eTag;
 	private float avgRating;
 	private int numRatings;
@@ -39,6 +40,10 @@ public class Video
 	@DynamoDBAttribute(attributeName="VideoLink")
 	public String getVideoLink() {return videoLink;}
 	public void setVideoLink(String videoLink) {this.videoLink = videoLink;}
+	
+	@DynamoDBAttribute(attributeName="ThumbnailLink")
+	public String getThumbnailLink() {return thumbnailLink;}
+	public void setThumbnailLink(String thumbnailLink) {this.thumbnailLink = thumbnailLink;}
 	
 	@DynamoDBAttribute(attributeName="ETag")
 	public String geteTag() {return eTag;}
@@ -85,6 +90,13 @@ public class Video
 	}
 	
 	@DynamoDBIgnore
+	public Video withThumbnailLink(String thumbnailLink)
+	{
+		this.thumbnailLink = thumbnailLink;
+		return this;
+	}
+	
+	@DynamoDBIgnore
 	public Video withETag(String eTag)
 	{
 		this.eTag = eTag;
@@ -126,6 +138,7 @@ public class Video
 			+ ", " + "bucketName=" + this.bucketName
 			+ ", " + "videoName=" + this.videoName
 			+ ", " + "videoLink=" + this.videoLink
+			+ ", " + "thumbnailLink=" + this.thumbnailLink
 			+ ", " + "eTag=" + this.eTag
 			+ ", " + "avgRating=" + this.avgRating
 			+ ", " + "numRatings=" + this.numRatings
@@ -133,4 +146,18 @@ public class Video
 		return str;
 	}
 	
+	@Override
+	@DynamoDBIgnore
+	public int compareTo(Object o)
+	{
+		if (this.avgRating > ((Video)o).avgRating)
+		{
+			return 1;
+		}
+		else if (this.avgRating < ((Video)o).avgRating)
+		{
+			return -1;
+		}
+		return 0;
+	}
 }

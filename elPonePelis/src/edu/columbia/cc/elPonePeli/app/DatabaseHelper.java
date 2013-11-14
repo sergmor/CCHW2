@@ -1,6 +1,7 @@
 package edu.columbia.cc.elPonePeli.app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.amazonaws.AmazonClientException;
@@ -133,20 +134,29 @@ public class DatabaseHelper
 	public List<Video> getAllVideos()
 	{
 		System.out.println("Trying to fetch all video records ...");
+		List<Video> scannedVideos = new ArrayList<Video>();
 		List<Video> videos = new ArrayList<Video>();
 		try
 		{			
 			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
 			DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
 			
-			videos = mapper.scan(Video.class, scanExpression);
-			System.out.println("Retrieved " + videos.size() + " record(s).");
+			scannedVideos = mapper.scan(Video.class, scanExpression);
+			System.out.println("Retrieved " + scannedVideos.size() + " record(s).");
+			
+			videos.addAll(scannedVideos);
+			
+			if (videos.size() > 0)
+			{
+				Collections.sort(videos);
+				Collections.reverse(videos);
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		return videos;
+		return scannedVideos;
 	}
 	
 	public void deleteVideoById(String id)

@@ -4,26 +4,27 @@ import java.io.InputStream;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AccessControlList;
-import com.amazonaws.services.s3.model.CanonicalGrantee;
 import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.Grant;
-import com.amazonaws.services.s3.model.Grantee;
 import com.amazonaws.services.s3.model.GroupGrantee;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.Owner;
 import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
-import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.Metadata;
 
 import edu.columbia.cc.elPonePelis.model.Video;
 
 public class VideoStore
 {
 	private AmazonS3Client s3 = null;
-	private String bucketName = "";
+	public static final String bucketName = "BUCKET_ALL";
+	
+	public VideoStore withCredentialsProvider(AWSCredentialsProvider provider)
+	{
+		this.s3 = new AmazonS3Client(provider);
+		return this;
+	}
 	
 	public VideoStore withCredentials(AWSCredentials awsCredentials)
 	{
@@ -31,26 +32,16 @@ public class VideoStore
 		return this;
 	}
 	
-	public VideoStore withBucketName(String bucketName)
-	{
-		this.bucketName = bucketName;
-		return this;
-	}
-
 	public String getBucketName() {
 		return bucketName;
 	}
 
-	public void setBucketName(String bucketName) {
-		this.bucketName = bucketName;
-	}
-	
 	public void initialize()
 	{
 		System.out.println("Trying to create S3 bucket (video store) ...");
 		try
 		{
-			if (this.bucketName.equals(""))
+			if (VideoStore.bucketName.equals(""))
 			{
 				throw new AmazonServiceException("Bucket name can't be empty.");
 			}
@@ -60,7 +51,7 @@ public class VideoStore
 				throw new AmazonServiceException("AmazonS3Client object can't be null.");
 			}
 			
-    		s3.createBucket(this.bucketName);
+    		s3.createBucket(VideoStore.bucketName);
     		System.out.println("Done.");
             
 	    }
@@ -79,7 +70,7 @@ public class VideoStore
 		Video video = null;
 		try
 		{
-			if (this.bucketName.equals(""))
+			if (VideoStore.bucketName.equals(""))
 			{
 				throw new AmazonServiceException("Bucket name can't be empty.");
 			}
@@ -92,7 +83,7 @@ public class VideoStore
 			AccessControlList acl = new AccessControlList();
 			acl.grantPermission(GroupGrantee.AllUsers, Permission.FullControl);
     		
-			s3.putObject(new PutObjectRequest(this.bucketName, key, is, null).withAccessControlList(acl));
+			s3.putObject(new PutObjectRequest(VideoStore.bucketName, key, is, null).withAccessControlList(acl));
 //			s3.putObject(this.bucketName, key, is, null);
 			System.out.println("Upload to S3 done.");
 			    		
