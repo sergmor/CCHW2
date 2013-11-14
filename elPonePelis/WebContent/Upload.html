@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <script>
+      function uploadVideo()
+        {
+        }
+        
+    </script>      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+    	Upload video
+    </title>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+    rel="stylesheet">
+  </head>
+  
+  <body>
+    padding-top: 100px;
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">el Pone Pelis</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active">
+              <a href="Home.html">Home</a>
+            </li>
+            <li>
+              <a href="Upload.html">Upload</a>
+            </li>
+            <li>
+              <a href="Delete.html">Delete</a>
+            </li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </div>      
+    <div class="container">
+      <div class="well">
+        <h3>
+          Upload your moody peli!
+        </h3>
+        <p>
+          Make sure you tag it!
+        </p>
+      </div>
+      <form method="POST" action="FileUploadServlet" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>
+            Upload your file:
+          </label>
+          <input type="file" name="file" id="file" class="form-control"/>
+          <div class="form-group">
+            <label>
+              Choose wisely your video format:
+            </label>
+            <select class="form-control">
+              <option value="flv">
+                flv
+              </option>
+              <option value="mp4">
+                mp4
+              </option>
+              <option value="qt">
+                qt
+              </option>
+            </select>
+          </div>
+          <!--
+          <button type="submit" class="btn btn-default pull-right"  onclick="uploadVideo()" style="top 20px" name="Upload!">
+            Upload!
+          </button>
+          -->
+          <input type="submit" class="btn btn-default pull-right" name="upload" id="upload" value="Upload" style="top 20px"/>
+        </div>
+      </form>
+      <div class="progress">
+        <div class="progress-bar" style="width: 50%;" >
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+    >
+    </script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
+    >
+    </script>
+  </body>
+
+</html>
