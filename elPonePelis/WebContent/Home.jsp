@@ -7,8 +7,7 @@
 <%@ page import="java.util.List" %>
 
 <%
-AWSCredentialsProvider credentialsProvider = new ClasspathPropertiesFileCredentialsProvider();
-DatabaseHelper helper = new DatabaseHelper().withCredentialsProvider(credentialsProvider);
+DatabaseHelper helper = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
 List<Video> videos = helper.getAllVideos();
 String defaultVideoLink = "";
 if (videos.size() > 0)

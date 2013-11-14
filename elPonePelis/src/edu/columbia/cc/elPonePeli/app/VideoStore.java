@@ -20,11 +20,11 @@ public class VideoStore
 	private AmazonS3Client s3 = null;
 	public static final String bucketName = "BUCKET_ALL";
 	
-	public VideoStore withCredentialsProvider(AWSCredentialsProvider provider)
-	{
-		this.s3 = new AmazonS3Client(provider);
-		return this;
-	}
+//	public VideoStore withCredentialsProvider(AWSCredentialsProvider provider)
+//	{
+//		this.s3 = new AmazonS3Client(provider);
+//		return this;
+//	}
 	
 	public VideoStore withCredentials(AWSCredentials awsCredentials)
 	{

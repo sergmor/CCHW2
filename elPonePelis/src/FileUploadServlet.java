@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
-import com.amazonaws.auth.PropertiesCredentials;
 
+import edu.columbia.cc.elPonePeli.app.AwsCredentialConstants;
 import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
 import edu.columbia.cc.elPonePeli.app.VideoStore;
 import edu.columbia.cc.elPonePelis.model.Video;
@@ -44,7 +45,7 @@ public class FileUploadServlet extends HttpServlet
 	    
 	    System.out.println("Calling video store method to perform upload to S3 ...");
 	    VideoStore store = new VideoStore()
-	    					.withCredentialsProvider(new ClasspathPropertiesFileCredentialsProvider());
+	    					.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
 	    Video video = store.storeIntoBucket(filename, filecontent);
 	    System.out.println("Call finished.");
 	    
@@ -56,7 +57,7 @@ public class FileUploadServlet extends HttpServlet
 	    {
 	    	System.out.println("Trying to persist details in database ...");
 		    DatabaseHelper helper = new DatabaseHelper()
-		    							.withCredentialsProvider(new ClasspathPropertiesFileCredentialsProvider());
+		    							.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
 		    helper.saveVideo(video);
 		    System.out.println("Done.");
 	    }
