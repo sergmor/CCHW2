@@ -20,4 +20,14 @@
     <servlet-name>FileUploadServlet</servlet-name>
     <url-pattern>/FileUploadServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RatingUpdateServlet</display-name>
+    <servlet-name>RatingUpdateServlet</servlet-name>
+    <servlet-class>RatingUpdateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RatingUpdateServlet</servlet-name>
+    <url-pattern>/RatingUpdateServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

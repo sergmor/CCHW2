@@ -2,17 +2,22 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ page import="com.amazonaws.auth.*" %>
 
-<%@ page import="edu.columbia.cc.elPonePeli.app.*" %>
+<%@ page import="edu.columbia.cc.elPonePeli.app.DatabaseHelper" %>
+<%@ page import="edu.columbia.cc.elPonePeli.app.AwsCredentialConstants" %>
 <%@ page import="edu.columbia.cc.elPonePelis.model.*" %>
 <%@ page import="java.util.List" %>
 
 <%
-DatabaseHelper helper = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
+//System.out.println("Property secret = "+System.getProperty("AWS_SECRET_KEY"));
+//System.out.println("Property access = "+System.getProperty("AWS_ACCESS_KEY_ID"));
+DatabaseHelper helper = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
 List<Video> videos = helper.getAllVideos();
 String defaultVideoLink = "";
+String defaultVideoId="";
 if (videos.size() > 0)
 {
 	defaultVideoLink = videos.get(0).getVideoLink();
+	defaultVideoId = videos.get(0).getId();
 }
 %>
 
@@ -107,17 +112,19 @@ if (videos.size() > 0)
                   Uploader
                 </p>
               </div>
-              <select>
-                    <option value="" disabled="disabled" selected="selected">Rate the video</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-               </select>
-               <button type="submit" class="btn btn-default"  onclick = "updateRating">
-                Rate
-               </button> 
+              <form action="RatingUpdateServlet" method="POST">
+              	<input type="hidden" name="currentVideoId" value="<%=defaultVideoId%>"/>
+	              <select name="rating">
+	                    <option value="1">1</option>
+	                    <option value="2">2</option>
+	                    <option value="3">3</option>
+	                    <option value="4">4</option>
+	                    <option value="5">5</option>
+	               </select>
+	               <button type="submit" class="btn btn-default">
+	                Rate
+	               </button>
+               </form>
                 
                <ul class="list-group">
                 <li class="list-group-item" style= "width: 564px" >

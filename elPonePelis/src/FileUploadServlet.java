@@ -45,7 +45,7 @@ public class FileUploadServlet extends HttpServlet
 	    
 	    System.out.println("Calling video store method to perform upload to S3 ...");
 	    VideoStore store = new VideoStore()
-	    					.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
+	    					.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
 	    Video video = store.storeIntoBucket(filename, filecontent);
 	    System.out.println("Call finished.");
 	    
