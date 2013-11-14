@@ -155,7 +155,7 @@ public class DatabaseHelper
 		{
 			e.printStackTrace();
 		}
-		return scannedVideos;
+		return videos;
 	}
 	
 	public void deleteVideoById(String id)

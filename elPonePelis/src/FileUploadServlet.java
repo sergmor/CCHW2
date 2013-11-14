@@ -57,7 +57,7 @@ public class FileUploadServlet extends HttpServlet
 	    {
 	    	System.out.println("Trying to persist details in database ...");
 		    DatabaseHelper helper = new DatabaseHelper()
-		    							.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.toString(), AwsCredentialConstants.SECRET.toString()));
+		    							.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
 		    helper.saveVideo(video);
 		    System.out.println("Done.");
 	    }

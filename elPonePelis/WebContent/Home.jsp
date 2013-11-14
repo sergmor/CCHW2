@@ -18,6 +18,13 @@ if (videos.size() > 0)
 {
 	defaultVideoLink = videos.get(0).getVideoLink();
 	defaultVideoId = videos.get(0).getId();
+	
+	for (Video v : videos)
+	{
+		System.out.println(v.toString());
+	}
+	
+	System.out.println("defaultVideoLink is " + defaultVideoLink);
 }
 %>
 
@@ -30,10 +37,18 @@ if (videos.size() > 0)
         {
 
         }
-      function playPeli()
-        {
-        alert("Hello! I am an alert box!!");
-        }  
+      function playPeli(linkName)
+      {
+    	  var videoPlayerId = document.getElementById('videoPlayerId');
+          var videoSrcId = document.getElementById('videoSrcId');
+			//TODO: have to set correct videoId also, for correct video to be rated
+          videoPlayerId.pause();
+          
+          videoSrcId.setAttribute("src", linkName);
+
+          videoPlayerId.load();
+          //videoPlayerId.play();
+      }  
         
     </script>
       
@@ -100,8 +115,8 @@ if (videos.size() > 0)
         <tbody>
           <tr>
             <td align = "left" >
-              <video width="400" height="300" controls="controls">
-                  <source src="<%=defaultVideoLink%>" alt="No Link" type="video/mp4" />
+              <video width="400" height="300" controls="controls" name="video" id="videoPlayerId">
+                  <source id="videoSrcId" src="<%=defaultVideoLink%>" alt="No Link" type="video/mp4" />
               </video>
                 
               <div class="well" style="height: 85px; width: 580px">
@@ -156,7 +171,7 @@ if (videos.size() > 0)
                     	%>
                     	  <tr>
                             <td align = "left">
-                                <div class="thumb" onclick="playPeli()"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
+                                <div class="thumb" onclick="playPeli(&quot;<%=v.getVideoLink()%>&quot;)"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
                             </td>
                         </tr>
                     	<% 
