@@ -116,7 +116,7 @@ public class OnDemandDistributor
 	       	CreateDistributionResult createDistributionResult = this.amazonCloudFrontClient.createDistribution(createDistributionRequest);
 	       	webDistributionDomainName = createDistributionResult.getDistribution().getDomainName();
 	       	
-	       	System.out.println("Created web distribution.");
+	       	System.out.println("Created web distribution : " + webDistributionDomainName);
 	       	
        }
        catch (AmazonServiceException ase)
@@ -153,7 +153,7 @@ public class OnDemandDistributor
         	CreateStreamingDistributionResult createStreamingDistributionResult = this.amazonCloudFrontClient.createStreamingDistribution(createStreamingDistributionRequest);
         	rtmpDistributionDomainName = createStreamingDistributionResult.getStreamingDistribution().getDomainName();
         	
-        	System.out.println("Created RTMP distribution.");
+        	System.out.println("Created RTMP distribution : " + rtmpDistributionDomainName);
         }
         catch (AmazonServiceException ase)
         {
