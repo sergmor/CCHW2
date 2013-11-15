@@ -17,7 +17,7 @@ public class LiveStreamingHelper {
 
 	private AmazonCloudFormation stackbuilder = null;
 	private final String streamingTemplateURL = "https://s3.amazonaws.com/cfwowza/live-http-streaming-wowza-media-server-3-6-using-cloudfront.txt";
-	private final String streamingStackName = "elPonePelisStreaming";
+	private final String streamingStackName = "elPonePeliStreaming";
 	
 	public LiveStreamingHelper(AWSCredentials credentials) {
 		stackbuilder = new AmazonCloudFormationClient(credentials);

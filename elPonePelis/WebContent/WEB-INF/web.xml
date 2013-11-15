@@ -30,4 +30,14 @@
     <servlet-name>RatingUpdateServlet</servlet-name>
     <url-pattern>/RatingUpdateServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TranscoderSNSServlet</display-name>
+    <servlet-name>TranscoderSNSServlet</servlet-name>
+    <servlet-class>edu.columbia.cc.elPonePeli.app.servlet.TranscoderSNSServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TranscoderSNSServlet</servlet-name>
+    <url-pattern>/TranscoderSNSServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

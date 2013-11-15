@@ -18,6 +18,8 @@ public class Video implements Comparable
 	private String bucketName;
 	private String videoName;
 	private String videoLink;
+	private String webLink;
+	private String mobileLink;
 	private String thumbnailLink;
 	private String eTag;
 	private float avgRating;
@@ -128,6 +130,21 @@ public class Video implements Comparable
 		this.numRatings++;
 				
 		return this.avgRating;
+	}
+	@DynamoDBAttribute(attributeName="WebLink")
+	public String getWebLink() {
+		return webLink;
+	}
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
+	}
+	
+	@DynamoDBAttribute(attributeName="MobileLink")
+	public String getMobileLink() {
+		return mobileLink;
+	}
+	public void setMobileLink(String mobileLink) {
+		this.mobileLink = mobileLink;
 	}
 	
 	@Override

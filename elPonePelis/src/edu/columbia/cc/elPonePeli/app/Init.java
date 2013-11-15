@@ -15,6 +15,7 @@ public class Init
 		init.createBucket();
 		init.createDistribution();
 		init.createDatabase();
+		init.createLiveStreaming();
 	}
 	
 	public void doCredentials()

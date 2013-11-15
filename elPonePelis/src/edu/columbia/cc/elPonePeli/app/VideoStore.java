@@ -19,7 +19,7 @@ import edu.columbia.cc.elPonePelis.model.Video;
 public class VideoStore
 {
 	private AmazonS3Client s3 = null;
-	public static final String bucketName = "bucketallmytube";
+	public static final String bucketName = "bucketallmytubedani";
 	
 	public VideoStore withCredentialsProvider(AWSCredentialsProvider provider)
 	{

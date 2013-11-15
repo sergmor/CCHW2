@@ -16,6 +16,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 
 import edu.columbia.cc.elPonePeli.app.AwsCredentialConstants;
 import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
+import edu.columbia.cc.elPonePeli.app.TranscoderHelper;
 import edu.columbia.cc.elPonePeli.app.VideoStore;
 import edu.columbia.cc.elPonePelis.model.Video;
 
@@ -48,6 +49,9 @@ public class FileUploadServlet extends HttpServlet
 	    					.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
 	    Video video = store.storeIntoBucket(filename, filecontent);
 	    System.out.println("Call finished.");
+	    
+	    TranscoderHelper transcoder = new TranscoderHelper(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
+	    transcoder.helpTranscode(video.getId(), video.getVideoName(), video.getBucketName(), video.getBucketName());
 	    
 	    if (video == null)
 	    {

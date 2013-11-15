@@ -15,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.columbia.cc.elPonePeli.app.AwsCredentialConstants;
+import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
 import edu.columbia.cc.elPonePelis.model.SNSMessage;
 
 /**
@@ -47,6 +50,8 @@ public class TranscoderSNSServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SecurityException{
+		
+		DatabaseHelper db = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(),AwsCredentialConstants.SECRET.getValue()));
 		//Get the message type header.
 		String messagetype = request.getHeader("x-amz-sns-message-type");
 		//If message doesn't have the message type header, don't process it.
@@ -90,7 +95,11 @@ public class TranscoderSNSServlet extends HttpServlet {
 			if (msg.getSubject() != null)
 				logMsgAndSubject += " Subject: " + msg.getSubject();
 			logMsgAndSubject += " Message: " + msg.getMessage();
+			String mes = msg.getMessage();
 			System.out.println(logMsgAndSubject);
+			if(mes.contains("COMPLETED")) {
+				
+			}
 			
 		}
 		else if (messagetype.equals("SubscriptionConfirmation"))
