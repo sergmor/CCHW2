@@ -45,8 +45,8 @@ public class TranscoderHelper {
 		
 		SubscribeRequest subscribeRequest = new SubscribeRequest()
 		.withTopicArn(topicName)
-		.withProtocol("email")
-		.withEndpoint("sdm2162@columbia.edu");
+		.withProtocol("http")
+		.withEndpoint("http://test-m2nt5e3rrf.elasticbeanstalk.com/TranscoderSNSServlet");
 		SubscribeResult subsResult = amazonSNSClient.subscribe(subscribeRequest);
 		System.out.println("subscribed to topic with id" + subsResult.getSubscriptionArn());
 		

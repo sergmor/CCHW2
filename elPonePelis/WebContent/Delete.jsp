@@ -96,11 +96,11 @@ List<Video> videos = helper.getAllVideos();
         %>
           
         </ul>
-      </form>
       <button type="submit" class="btn btn-default" onclick = "deletePeli">
         Farewell
       </button>
-    </div>
+      </form>
+      </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
     >
     </script>
