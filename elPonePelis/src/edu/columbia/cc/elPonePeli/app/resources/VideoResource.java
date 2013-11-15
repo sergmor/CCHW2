@@ -41,7 +41,7 @@ public class VideoResource
 	}
 	
 	@PUT
-	 public Response putTodo(JAXBElement<Video> video) {
+	 public Response putVideo(JAXBElement<Video> video) {
 	    Video newVideo = video.getValue();
 	    PonePeli.instance.createVideoEntry(newVideo);
 	    Response res;
