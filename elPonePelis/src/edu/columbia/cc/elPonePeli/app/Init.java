@@ -45,5 +45,11 @@ public class Init
 		helper.initialize();
 		
 	}
+	
+	public void createLiveStreaming() {
+		LiveStreamingHelper lsh = new LiveStreamingHelper(awsCredentials);		
+	}
+	
+	
 
 }

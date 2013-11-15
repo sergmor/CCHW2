@@ -1,5 +1,9 @@
 package edu.columbia.cc.elPonePelis.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+
 public class SNSMessage {
     @JsonProperty("Type")
     private String type = "";
@@ -9,6 +13,8 @@ public class SNSMessage {
     private String token = "";
     @JsonProperty("TopicArn")
     private String topicArn = "";
+    @JsonProperty("Subject")
+    private String subject;
     @JsonProperty("Message")
     private String message;
     @JsonProperty("SubscribeURL")
@@ -90,4 +96,11 @@ public class SNSMessage {
     public void setUnsubscribeURL(String unsubscribeURL) {
         this.unsubscribeURL = unsubscribeURL;
     }
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+    
 }
