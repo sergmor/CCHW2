@@ -24,7 +24,7 @@ import edu.columbia.cc.elPonePelis.model.Video;
 public class DatabaseHelper
 {
 	private AmazonDynamoDBClient amazonDynamoDBClient = null;
-	public static final String tableName = "VIDEOS_ALL";
+	public static final String tableName = "videosallmytube";
 	
 	public DatabaseHelper withCredentials(AWSCredentials awsCredentials)
 	{

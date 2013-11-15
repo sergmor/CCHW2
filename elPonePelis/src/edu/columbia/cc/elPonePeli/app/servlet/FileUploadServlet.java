@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 
 import edu.columbia.cc.elPonePeli.app.AwsCredentialConstants;
 import edu.columbia.cc.elPonePeli.app.DatabaseHelper;

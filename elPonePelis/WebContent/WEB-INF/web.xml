@@ -14,7 +14,7 @@
     <description></description>
     <display-name>FileUploadServlet</display-name>
     <servlet-name>FileUploadServlet</servlet-name>
-    <servlet-class>FileUploadServlet</servlet-class>
+    <servlet-class>edu.columbia.cc.elPonePeli.app.servlet.FileUploadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>FileUploadServlet</servlet-name>
@@ -24,7 +24,7 @@
     <description></description>
     <display-name>RatingUpdateServlet</display-name>
     <servlet-name>RatingUpdateServlet</servlet-name>
-    <servlet-class>RatingUpdateServlet</servlet-class>
+    <servlet-class>edu.columbia.cc.elPonePeli.app.servlet.RatingUpdateServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RatingUpdateServlet</servlet-name>

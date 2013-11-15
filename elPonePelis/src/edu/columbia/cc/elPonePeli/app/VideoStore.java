@@ -5,6 +5,7 @@ import java.io.InputStream;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.GetObjectRequest;
@@ -18,7 +19,7 @@ import edu.columbia.cc.elPonePelis.model.Video;
 public class VideoStore
 {
 	private AmazonS3Client s3 = null;
-	public static final String bucketName = "BUCKET_ALL";
+	public static final String bucketName = "bucketallmytube";
 	
 	public VideoStore withCredentialsProvider(AWSCredentialsProvider provider)
 	{
@@ -92,8 +93,13 @@ public class VideoStore
     		String bucketName = s3Object.getBucketName();
     		String videoName = s3Object.getKey();
     		String eTag = s3Object.getObjectMetadata().getETag();
-    		String videoLink = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+//    		String videoLink = s3Object.getObjectContent().getHttpRequest().getURI().toString();
     		String videoFormat = "default";
+    		
+    		OnDemandDistributor distributor = new OnDemandDistributor().withAWSCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
+    		String webDistributionDomainName = distributor.getWebDistributionName();
+    		String videoLink = "http://" + webDistributionDomainName + "/" + videoName;
+    		
     		video = new Video()
     						.withBucketName(bucketName)
     						.withVideoName(videoName)

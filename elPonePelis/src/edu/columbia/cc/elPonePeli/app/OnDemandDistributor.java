@@ -16,6 +16,8 @@ import com.amazonaws.services.cloudfront.model.CreateStreamingDistributionResult
 import com.amazonaws.services.cloudfront.model.DefaultCacheBehavior;
 import com.amazonaws.services.cloudfront.model.DistributionConfig;
 import com.amazonaws.services.cloudfront.model.ForwardedValues;
+import com.amazonaws.services.cloudfront.model.ListDistributionsRequest;
+import com.amazonaws.services.cloudfront.model.ListDistributionsResult;
 import com.amazonaws.services.cloudfront.model.LoggingConfig;
 import com.amazonaws.services.cloudfront.model.Origin;
 import com.amazonaws.services.cloudfront.model.Origins;
@@ -161,6 +163,17 @@ public class OnDemandDistributor
                 System.out.println("Request ID: " + ase.getRequestId());
         }
 		return rtmpDistributionDomainName;
+	}
+	
+	public String getWebDistributionName()
+	{
+		System.out.println("Trying to get web distribution domain name ...");
+		ListDistributionsRequest listDistributionsRequest = new ListDistributionsRequest().withMaxItems("1");
+		ListDistributionsResult listDistributionsResult = this.amazonCloudFrontClient.listDistributions(listDistributionsRequest);
+		String distibutionName = listDistributionsResult.getDistributionList().getItems().get(0).getDomainName();
+		System.out.println("Retrieved : " + distibutionName);
+		
+		return distibutionName;
 	}
 
 }
