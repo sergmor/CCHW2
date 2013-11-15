@@ -91,6 +91,7 @@ public class TranscoderSNSServlet extends HttpServlet {
 				logMsgAndSubject += " Subject: " + msg.getSubject();
 			logMsgAndSubject += " Message: " + msg.getMessage();
 			System.out.println(logMsgAndSubject);
+			
 		}
 		else if (messagetype.equals("SubscriptionConfirmation"))
 		{
