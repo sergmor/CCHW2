@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,7 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.columbia.cc.elPonePeli.app.AwsCredentialConstants;
 import edu.columbia.cc.elPonePeli.app.DatabaseHelper;
+import edu.columbia.cc.elPonePeli.app.OnDemandDistributor;
+import edu.columbia.cc.elPonePeli.app.SNSHelper;
 import edu.columbia.cc.elPonePelis.model.SNSMessage;
+import edu.columbia.cc.elPonePelis.model.TranscoderMessage;
+import edu.columbia.cc.elPonePelis.model.TranscoderOutput;
+import edu.columbia.cc.elPonePelis.model.Video;
 
 /**
  * Servlet implementation class TranscoderSNSServlet
@@ -50,8 +56,13 @@ public class TranscoderSNSServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SecurityException{
+		AWSCredentials credentials = new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(),AwsCredentialConstants.SECRET.getValue());
+		DatabaseHelper db = new DatabaseHelper().withCredentials(credentials);
+		OnDemandDistributor ond = new OnDemandDistributor().withAWSCredentials(credentials);
 		
-		DatabaseHelper db = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(),AwsCredentialConstants.SECRET.getValue()));
+		String distroName = "";
+		distroName = ond.getWebDistributionName();
+		
 		//Get the message type header.
 		String messagetype = request.getHeader("x-amz-sns-message-type");
 		//If message doesn't have the message type header, don't process it.
@@ -86,7 +97,7 @@ public class TranscoderSNSServlet extends HttpServlet {
 			System.out.println(">>Unexpected signature version. Unable to verify signature.");
 			throw new SecurityException("Unexpected signature version. Unable to verify signature.");
 		}
-
+		
 		// Process the message based on type.
 		if (messagetype.equals("Notification")) {
 			//TODO: Do something with the Message and Subject.
@@ -98,6 +109,28 @@ public class TranscoderSNSServlet extends HttpServlet {
 			String mes = msg.getMessage();
 			System.out.println(logMsgAndSubject);
 			if(mes.contains("COMPLETED")) {
+				
+				TranscoderMessage mess = readTransMesFromJson(mes);
+				TranscoderOutput out = mess.getOutputs()[0];
+				String filename = out.getKey();
+				String id = filename.trim().substring(0, filename.indexOf("_"));
+				System.out.println("Try id "+ id);
+				Video vid = db.getVideoById(id);
+				System.out.println("got vid with id "+ vid.getId());
+			//Set thumbnail
+				String thmb = out.getThumbnailPattern().replace("{count}", "00001");
+				thmb = thmb.concat(".png");
+				vid.setThumbnailLink("http://" + distroName + "/" + thmb);
+				if(filename.contains("web")) {
+					vid.setWebLink("http://" + distroName + "/" + filename);
+					System.out.println("Set weblink with value "+vid.getWebLink());
+					db.saveVideo(vid);
+				}else if(filename.contains("mob")) {
+					vid.setMobileLink("http://" + distroName + "/" + filename);
+					System.out.println("Set mobilelink with value "+vid.getMobileLink());
+					db.saveVideo(vid);
+				}
+				
 				
 			}
 			
@@ -116,6 +149,7 @@ public class TranscoderSNSServlet extends HttpServlet {
 			}
 			System.out.println(">>Subscription confirmation (" + msg.getSubscribeURL() +") Return value: " + sb.toString());
 			//TODO: Process the return value to ensure the endpoint is subscribed.
+			SNSHelper.INSTANCE.confirmTopicSubmission(msg);
 		}
 		else if (messagetype.equals("UnsubscribeConfirmation")) {
 			//TODO: Handle UnsubscribeConfirmation message. 
@@ -130,6 +164,7 @@ public class TranscoderSNSServlet extends HttpServlet {
 		}
 		System.out.println(">>Done processing message: " + msg.getMessageId());
 	}
+
 
 	private boolean isMessageSignatureValid(SNSMessage msg) {
 
@@ -217,6 +252,25 @@ public class TranscoderSNSServlet extends HttpServlet {
 		SNSMessage message = null;
 		try {
 			message = mapper.readValue(string, SNSMessage.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return message;
+	}
+	
+	private TranscoderMessage readTransMesFromJson(String mes) {
+		ObjectMapper mapper = new ObjectMapper(); 
+		TranscoderMessage message = null;
+		try {
+			message = mapper.readValue(mes, TranscoderMessage.class);
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -96,7 +96,7 @@ public class DatabaseHelper
 		try
 		{			
 			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
-			mapper.save(video);
+			mapper.save(video);			
 			System.out.println("Saved.");
 		}
 		catch (Exception e)
@@ -113,6 +113,7 @@ public class DatabaseHelper
 		{			
 			DynamoDBMapper mapper = new DynamoDBMapper(this.amazonDynamoDBClient);
 			video = mapper.load(Video.class, id);
+			
 			if (video == null)
 			{
 				System.out.println("No such record found.");

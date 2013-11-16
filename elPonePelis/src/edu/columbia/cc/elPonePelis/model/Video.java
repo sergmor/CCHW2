@@ -63,6 +63,22 @@ public class Video implements Comparable
 	public String getVideoFormat() {return videoFormat;}
 	public void setVideoFormat(String videoFormat) {this.videoFormat = videoFormat;}
 	
+	@DynamoDBAttribute(attributeName="WebLink")
+	public String getWebLink() {
+		return webLink;
+	}
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
+	}
+	
+	@DynamoDBAttribute(attributeName="MobileLink")
+	public String getMobileLink() {
+		return mobileLink;
+	}
+	public void setMobileLink(String mobileLink) {
+		this.mobileLink = mobileLink;
+	}
+	
 	@DynamoDBIgnore
 	public Video withId(String id)
 	{
@@ -131,21 +147,7 @@ public class Video implements Comparable
 				
 		return this.avgRating;
 	}
-	@DynamoDBAttribute(attributeName="WebLink")
-	public String getWebLink() {
-		return webLink;
-	}
-	public void setWebLink(String webLink) {
-		this.webLink = webLink;
-	}
-	
-	@DynamoDBAttribute(attributeName="MobileLink")
-	public String getMobileLink() {
-		return mobileLink;
-	}
-	public void setMobileLink(String mobileLink) {
-		this.mobileLink = mobileLink;
-	}
+
 	
 	@Override
 	@DynamoDBIgnore

@@ -6,7 +6,42 @@
       function uploadVideo()
         {
         }
-        
+      function validateFile()
+      {
+     var fname = new String(document.getElementById("file").value);
+     var len = fname.length;
+     var valid = false;
+     if (fname.substring(len-4, len).toLowerCase() == ".mov")
+     {
+      valid = true;
+     }
+     else if (fname.substring(len-4, len).toLowerCase() == ".mp4")
+ {
+  valid = true;
+ }
+     else if (fname.substring(len-4, len).toLowerCase() == ".flv")
+ {
+  valid = true;
+ }
+
+     if (valid == false)
+     {
+      alert("Wrong format of video.");
+     }
+
+     return valid;
+      }
+      function getBrowser()
+      {            
+          if(window.innerWidth <= 800 && window.innerHeight <= 600)
+          {
+              return "http://54.204.185.214:1935/live/myStream/playlist.m3u8";
+          } 
+          else 
+          {
+              return "http://www.wowza.com/resources/3.6.0/examples/LiveVideoStreaming/FlashHTTPPlayer/player.html"
+          }
+      } 
     </script>      
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,10 +76,10 @@
               <a href="Upload.html">Upload</a>
             </li>
             <li>
-              <a href="Delete.html">Delete</a>
+              <a href="Delete.jsp">Delete</a>
             </li>
             <li>
-              <a href="LiveStream.html">Live Stream</a>
+              <a href="javascript:document.location.href=getBrowser();" >LiveStream</a>
             </li>
           </ul>
         </div>
@@ -60,28 +95,12 @@
           Make sure you tag it!
         </p>
       </div>
-      <form method="POST" action="FileUploadServlet" enctype="multipart/form-data">
+      <form method="POST" action="FileUploadServlet" enctype="multipart/form-data" onsubmit="return validateFile()">
         <div class="form-group">
           <label>
             Upload your file:
           </label>
           <input type="file" name="file" id="file" class="form-control"/>
-          <div class="form-group">
-            <label>
-              Choose wisely your video format:
-            </label>
-            <select class="form-control">
-              <option value="flv">
-                flv
-              </option>
-              <option value="mp4">
-                mp4
-              </option>
-              <option value="qt">
-                qt
-              </option>
-            </select>
-          </div>
           <!--
           <button type="submit" class="btn btn-default pull-right"  onclick="uploadVideo()" style="top 20px" name="Upload!">
             Upload!
@@ -90,10 +109,6 @@
           <input type="submit" class="btn btn-default pull-right" name="upload" id="upload" value="Upload" style="top 20px"/>
         </div>
       </form>
-      <div class="progress">
-        <div class="progress-bar" style="width: 50%;" >
-        </div>
-      </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
     >

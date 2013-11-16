@@ -1,6 +1,7 @@
 package edu.columbia.cc.elPonePeli.app;
 
 import java.util.Date;
+import java.util.List;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -15,6 +16,7 @@ import com.amazonaws.services.cloudfront.model.CreateStreamingDistributionReques
 import com.amazonaws.services.cloudfront.model.CreateStreamingDistributionResult;
 import com.amazonaws.services.cloudfront.model.DefaultCacheBehavior;
 import com.amazonaws.services.cloudfront.model.DistributionConfig;
+import com.amazonaws.services.cloudfront.model.DistributionSummary;
 import com.amazonaws.services.cloudfront.model.ForwardedValues;
 import com.amazonaws.services.cloudfront.model.ListDistributionsRequest;
 import com.amazonaws.services.cloudfront.model.ListDistributionsResult;
@@ -168,10 +170,18 @@ public class OnDemandDistributor
 	public String getWebDistributionName()
 	{
 		System.out.println("Trying to get web distribution domain name ...");
-		ListDistributionsRequest listDistributionsRequest = new ListDistributionsRequest().withMaxItems("1");
+		ListDistributionsRequest listDistributionsRequest = new ListDistributionsRequest().withMaxItems("3");
 		ListDistributionsResult listDistributionsResult = this.amazonCloudFrontClient.listDistributions(listDistributionsRequest);
-		String distibutionName = listDistributionsResult.getDistributionList().getItems().get(0).getDomainName();
-		System.out.println("Retrieved : " + distibutionName);
+		
+		List<DistributionSummary> distros = listDistributionsResult.getDistributionList().getItems();
+		String distibutionName = "";
+		for (DistributionSummary distributionSummary : distros) {
+			if(distributionSummary.getComment().toLowerCase().contains("yes")) {
+				distibutionName = distributionSummary.getDomainName();
+			}
+			System.out.println("Retrieved : " + distibutionName);
+		}
+		
 		
 		return distibutionName;
 	}

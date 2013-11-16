@@ -28,54 +28,58 @@ import edu.columbia.cc.elPonePelis.model.Video;
 public class FileUploadServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-       
-    public FileUploadServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
+
+	public FileUploadServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    Part filePart = request.getPart("file");
-	    String filename = getFilename(filePart);
-	    InputStream filecontent = filePart.getInputStream();
-	    
-	    System.out.println("Calling video store method to perform upload to S3 ...");
-	    VideoStore store = new VideoStore()
-	    					.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
-	    Video video = store.storeIntoBucket(filename, filecontent);
-	    System.out.println("Call finished.");
-	    
-	    TranscoderHelper transcoder = new TranscoderHelper(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
-	    transcoder.helpTranscode(video.getId(), video.getVideoName(), video.getBucketName(), video.getBucketName());
-	    
-	    if (video == null)
-	    {
-	    	System.out.println("Some error occurred. No details to persist in the database.");
-	    }
-	    else
-	    {
-	    	System.out.println("Trying to persist details in database ...");
-		    DatabaseHelper helper = new DatabaseHelper()
-		    							.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
-		    helper.saveVideo(video);
-		    System.out.println("Done.");
-	    }
-	    
-	    response.sendRedirect("Upload.html");
+		Part filePart = request.getPart("file");
+		String filename = getFilename(filePart);
+		InputStream filecontent = filePart.getInputStream();
+
+		System.out.println("Calling video store method to perform upload to S3 ...");
+		VideoStore store = new VideoStore()
+		.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
+		Video video = store.storeIntoBucket(filename, filecontent);
+		System.out.println("Call finished.");
+
+
+		if (video == null)
+		{
+			System.out.println("Some error occurred. No details to persist in the database.");
+		}
+		else
+		{
+			System.out.println("Trying to persist details in database ...");
+			DatabaseHelper helper = new DatabaseHelper()
+			.withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
+			helper.saveVideo(video);
+			System.out.println("Done. Saving video with id "+video.getId());
+			//Video toTranscode = helper.getVideoById(id)
+			TranscoderHelper transcoder = TranscoderHelper.INSTANCE;
+			transcoder.init();
+			transcoder.helpTranscode(video.getId(), video.getVideoName(), video.getBucketName(), video.getBucketName());
+		}
+
+
+
+		response.sendRedirect("Home.jsp");
 	}
 
 	private static String getFilename(Part part) {
-	    for (String cd : part.getHeader("content-disposition").split(";")) {
-	        if (cd.trim().startsWith("filename")) {
-	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-	            return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
-	        }
-	    }
-	    return null;
+		for (String cd : part.getHeader("content-disposition").split(";")) {
+			if (cd.trim().startsWith("filename")) {
+				String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+				return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
+			}
+		}
+		return null;
 	}
 }

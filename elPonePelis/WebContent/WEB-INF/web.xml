@@ -40,4 +40,14 @@
     <servlet-name>TranscoderSNSServlet</servlet-name>
     <url-pattern>/TranscoderSNSServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FileDeleteServlet</display-name>
+    <servlet-name>FileDeleteServlet</servlet-name>
+    <servlet-class>edu.columbia.cc.elPonePeli.app.servlet.FileDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileDeleteServlet</servlet-name>
+    <url-pattern>/FileDeleteServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -50,6 +50,7 @@ public class FileDeleteServlet extends HttpServlet {
 			
 		}
 		System.out.println("Nothing came across");
+		response.sendRedirect("Home.jsp");
 	}
 
 }

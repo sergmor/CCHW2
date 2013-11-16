@@ -4,8 +4,8 @@ public enum AwsCredentialConstants
 {
 //	SECRET (System.getProperty("AWS_SECRET_KEY")),
 //	ACCESS (System.getProperty("AWS_ACCESS_KEY_ID"));
-	SECRET ("MqPxJF3QOZHR/W6THDkDChv/TGyAGMQn+d7Jyx1k"),
-	ACCESS ("AKIAIZ4KF3A5NHIUFMUQ");
+	SECRET ("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"),
+	ACCESS ("AKIAJXGC6OSQRB644AMA");
 	
 	private final String key;
 	

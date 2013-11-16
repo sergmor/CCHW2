@@ -5,26 +5,45 @@
 <%@ page import="edu.columbia.cc.elPonePeli.app.DatabaseHelper" %>
 <%@ page import="edu.columbia.cc.elPonePeli.app.AwsCredentialConstants" %>
 <%@ page import="edu.columbia.cc.elPonePelis.model.*" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="org.apache.commons.logging.Log" %>
+<%@ page import="org.apache.commons.logging.LogFactory" %>
 <%@ page import="java.util.List" %>
+ 
 
 <%
 //System.out.println("Property secret = "+System.getProperty("AWS_SECRET_KEY"));
 //System.out.println("Property access = "+System.getProperty("AWS_ACCESS_KEY_ID"));
+Log log = LogFactory.getLog(Object.class);
 DatabaseHelper helper = new DatabaseHelper().withCredentials(new BasicAWSCredentials(AwsCredentialConstants.ACCESS.getValue(), AwsCredentialConstants.SECRET.getValue()));
 List<Video> videos = helper.getAllVideos();
 String defaultVideoLink = "";
 String defaultVideoId="";
+String defaultVideoName="No videos";
+String defaultVideoRating="";
+boolean mobile=false;
+String userAgent = request.getHeader("user-agent");
+//Checks if it is a mobile browser 
+Pattern pattern = Pattern.compile("up.browser|up.link|windows ce|iphone|iemobile|mini|mmp|symbian|midp|wap|phone|pocket|mobile|pda|psp", Pattern.CASE_INSENSITIVE);   
+Matcher matcher = pattern.matcher(userAgent);   
+if (matcher.find()){ mobile = true; } 
+log.error("mobile is " + mobile);
+
 if (videos.size() > 0)
 {
-	defaultVideoLink = videos.get(0).getVideoLink();
+	defaultVideoLink = mobile ? videos.get(0).getMobileLink() : videos.get(0).getWebLink();
 	defaultVideoId = videos.get(0).getId();
+	defaultVideoName = videos.get(0).getVideoName();
+	defaultVideoRating = ""+videos.get(0).getAvgRating();
 	
 	for (Video v : videos)
 	{
 		System.out.println(v.toString());
 	}
+	log.error("defaultVideoLink is " + defaultVideoLink);
 	
-	System.out.println("defaultVideoLink is " + defaultVideoLink);
 }
 %>
 
@@ -37,7 +56,7 @@ if (videos.size() > 0)
         {
 
         }
-      function playPeli(videoLink, videoId)
+      function playPeli(videoLink, videoId, videoRating)
       {
     	  var videoPlayer = document.getElementById('videoPlayerId');
           var videoSrc = document.getElementById('videoSrcId');
@@ -51,8 +70,19 @@ if (videos.size() > 0)
           //alert("videoLink="+videoLink+", videoId="+videoId);
           
           document.getElementById('currentVideoId').value = videoId;
+          document.getElementById('currentVideoRating').value = videoRating;
       }  
-        
+      function getBrowser()
+      {            
+          if(window.innerWidth <= 800 && window.innerHeight <= 600)
+          {
+              return "http://54.204.185.214:1935/live/myStream/playlist.m3u8";
+          } 
+          else 
+          {
+              return "http://www.wowza.com/resources/3.6.0/examples/LiveVideoStreaming/FlashHTTPPlayer/player.html"
+          }
+      } 
     </script>
       
     <meta charset="utf-8">
@@ -89,10 +119,10 @@ if (videos.size() > 0)
               <a href="Upload.html">Upload</a>
             </li>
             <li>
-              <a href="Delete.html">Delete</a>
+              <a href="Delete.jsp">Delete</a>
             </li>
             <li>
-              <a href="LiveStream.html">Live Stream</a>
+				<a href="javascript:document.location.href=getBrowser();" >LiveStream</a>	
             </li>
           </ul>
         </div>
@@ -128,14 +158,13 @@ if (videos.size() > 0)
                 
               <div class="well" style="height: 85px; width: 580px">
                 <h4>
-                  Video Title
+                  <%=defaultVideoName%> - <%=defaultVideoRating%>
                 </h4>
-                <p>
-                  Uploader
-                </p>
+                
               </div>
               <form action="RatingUpdateServlet" method="POST">
               	<input type="hidden" name="currentVideoId" value="<%=defaultVideoId%>" id="currentVideoId"/>
+              	<input type="hidden" name="currentVideoRating" value="<%=defaultVideoRating%>" id="currentVideoRating"/>
 	              <select name="rating">
 	                    <option value="1">1</option>
 	                    <option value="2">2</option>
@@ -147,24 +176,7 @@ if (videos.size() > 0)
 	                Rate
 	               </button>
                </form>
-                
-               <ul class="list-group">
-                <li class="list-group-item" style= "width: 564px" >
-                    <textarea name="comments" style="position: absolute; top: 2px;left: 0px;"cols="90" rows="2">                        
-                        
-                    </textarea>                    
-                    Comment..!
-                </li>
-                <li class="list-group-item"  style= "width: 564px">
-                    <textarea name="comments" style="position: absolute; top: 2px;left: 0px;"cols="90" rows="2"> 
-                        
-                    </textarea>
-                  Comment..!!
-                </li>
-              </ul>
-              <button type="submit" class="btn btn-default">
-                Add Comment
-              </button>                    
+             
             <td>
             <table class="table">
                 <tbody>
@@ -178,7 +190,12 @@ if (videos.size() > 0)
                     	%>
                     	  <tr>
                             <td align = "left">
-                                <div class="thumb" onclick="playPeli(&quot;<%=v.getVideoLink()%>&quot;,&quot;<%=v.getId()%>&quot;)"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
+                            	<%String linkToShow;
+                            	if (mobile)
+                           {linkToShow = v.getMobileLink();}
+                           else
+                           {linkToShow = v.getWebLink();}%>
+                                <div class="thumb" onclick="playPeli(&quot;<%=linkToShow%>&quot;,&quot;<%=v.getId()%>&quot;,&quot;<%=v.getAvgRating()%>&quot;)"><img id="<%=v.getId()%>" src="<%=v.getThumbnailLink()%>" alt="Smiley face" height="85" width="85" /></div>
                             </td>
                         </tr>
                     	<% 

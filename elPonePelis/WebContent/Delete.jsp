@@ -24,6 +24,18 @@ List<Video> videos = helper.getAllVideos();
         {
 
         }      
+      
+      function getBrowser()
+      {            
+          if(window.innerWidth <= 800 && window.innerHeight <= 600)
+          {
+              return "http://54.204.185.214:1935/live/myStream/playlist.m3u8";
+          } 
+          else 
+          {
+              return "http://www.wowza.com/resources/3.6.0/examples/LiveVideoStreaming/FlashHTTPPlayer/player.html"
+          }
+      } 
     </script> 
       
     <meta charset="utf-8">
@@ -59,10 +71,10 @@ List<Video> videos = helper.getAllVideos();
               <a href="Upload.html">Upload</a>
             </li>
             <li>
-              <a href="Delete.html">Delete</a>
+              <a href="Delete.jsp">Delete</a>
             </li>
             <li>
-              <a href="LiveStream.html">Live Stream</a>
+              <a href="javascript:document.location.href=getBrowser();" >LiveStream</a>
             </li>
           </ul>
         </div>
@@ -85,7 +97,8 @@ List<Video> videos = helper.getAllVideos();
         {
         %>
 			<li class="list-group-item">
-				<span class="badge">14</span>
+				<span class="badge">Rating : <%=v.getAvgRating()%></span>
+				<img alt="" src="<%=v.getThumbnailLink()%>">
 				<%=v.getVideoName()%>
 				<label class="checkbox">
 					<input type="checkbox" name="checkboxgroup" value="<%=v.getId()%>">&nbsp;Delete this peli!
